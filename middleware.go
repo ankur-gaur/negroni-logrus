@@ -38,8 +38,6 @@ func (l *Middleware) ServeHTTP(rw http.ResponseWriter, r *http.Request, next htt
         "remote":  r.RemoteAddr,
     }).Info("started handling request")
 
-    Info(fmt.Sprintf("started handling request: method=%s remote=%s request=%s", r.Method, r.RemoteAddr, r.RequestURI))
-
     next(rw, r)
 
     latency := time.Since(start)
@@ -54,7 +52,7 @@ func (l *Middleware) ServeHTTP(rw http.ResponseWriter, r *http.Request, next htt
         fmt.Sprintf("measure#%s.latency", l.Name): latency.Nanoseconds(),
     }).Info("completed handling request")
 
-    msg := fmt.Sprintf("completed handling request: measure#%s.latency=%d method=%s remote=%s request=%s status=%d text_status=%s took=%s", l.Name, latency.Nanoseconds(), r.Method, r.RemoteAddr, r.RequestURI, res.Status(), http.StatusText(res.Status()), latency)
+    msg := fmt.Sprintf("Completed handling request: measure#%s.latency=%d method=%s remote=%s request=%s status=%d text_status=%s took=%s", l.Name, latency.Nanoseconds(), r.Method, r.RemoteAddr, r.RequestURI, res.Status(), http.StatusText(res.Status()), latency)
     if res.Status() == http.StatusOK {
         Info(msg)
     } else {
